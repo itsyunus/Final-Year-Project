@@ -5,9 +5,9 @@ import MainLayout from './components/MainLayout.jsx';
 export default function App() {
     const {
         user, lang, t, theme, sidebarCollapsed, activeView, mobileSidebarOpen,
-        chats, activeChatId, aiProvider, // New states exported
+        chats, activeChatId, aiProvider, apiKeys, // New states exported
         login, logout, toggleLang, toggleTheme, toggleSidebar, toggleAiProvider, setActiveView, setMobileSidebarOpen,
-        createNewChat, updateChatMessages, switchChat // New methods exported
+        createNewChat, updateChatMessages, switchChat, saveApiKeys // New methods exported
     } = useAppState();
 
     if (!user) {
@@ -36,6 +36,8 @@ export default function App() {
             setMobileSidebarOpen={setMobileSidebarOpen}
             aiProvider={aiProvider}
             toggleAiProvider={toggleAiProvider}
+            apiKeys={apiKeys}
+            saveApiKeys={saveApiKeys}
         />
     );
 }

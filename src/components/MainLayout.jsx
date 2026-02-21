@@ -1,15 +1,18 @@
+import { useState } from 'react';
 import Sidebar from './Sidebar.jsx';
 import Chat from './Chat.jsx';
 import PNRLookup from './PNRLookup.jsx';
 import FlightBoard from './FlightBoard.jsx';
 import Dashboard from './Dashboard.jsx';
+import ApiSettings from './ApiSettings.jsx';
 import { Menu, Bell } from 'lucide-react';
 
 export default function MainLayout({
     user, activeView, setActiveView, sidebarCollapsed, toggleSidebar,
     lang, toggleLang, theme, toggleTheme,
     chats, activeChatId, createNewChat, updateChatMessages, switchChat,
-    onLogout, t, mobileSidebarOpen, setMobileSidebarOpen, aiProvider, toggleAiProvider
+    onLogout, t, mobileSidebarOpen, setMobileSidebarOpen, aiProvider, toggleAiProvider,
+    apiKeys, saveApiKeys
 }) {
     const renderView = () => {
         switch (activeView) {
@@ -20,9 +23,11 @@ export default function MainLayout({
                 updateChatMessages={updateChatMessages}
                 aiProvider={aiProvider}
                 user={user}
+                apiKeys={apiKeys}
             />;
             case 'pnr': return <PNRLookup t={t} />;
             case 'flights': return <FlightBoard t={t} />;
+            case 'settings': return <ApiSettings apiKeys={apiKeys} saveApiKeys={saveApiKeys} />;
             case 'dashboard':
             case 'documents':
             case 'analytics':
@@ -47,6 +52,7 @@ export default function MainLayout({
         documents: 'Document Control',
         analytics: 'Analytics',
         audit: 'Audit Log',
+        settings: 'API Configuration',
     };
 
     return (

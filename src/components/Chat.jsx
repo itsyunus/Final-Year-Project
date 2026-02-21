@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { generateResponseStream } from '../utils/ragEngine.js';
 import { Plane, Search, Briefcase, DollarSign, FileText, CloudRain, Paperclip, Send, Copy, RefreshCw, FileText as FileIcon, ChevronUp, ChevronDown, Check, User, Bot, AlertTriangle } from 'lucide-react';
 
-export default function Chat({ t, chats, activeChatId, updateChatMessages, aiProvider, user }) {
+export default function Chat({ t, chats, activeChatId, updateChatMessages, aiProvider, user, apiKeys }) {
     const activeChat = chats.find(c => c.id === activeChatId) || chats[0];
     const messages = activeChat?.messages || [];
 
@@ -18,6 +18,19 @@ export default function Chat({ t, chats, activeChatId, updateChatMessages, aiPro
     const handleSend = async () => {
         const query = input.trim();
         if (!query || isTyping) return;
+
+        // Validate API Keys
+        const hasGroq = !!(apiKeys?.groqKey || import.meta.env.VITE_GROQ_API_KEY);
+        const hasBedrock = !!(apiKeys?.awsAccess || import.meta.env.VITE_AWS_ACCESS_KEY_ID);
+
+        if (aiProvider === 'groq' && !hasGroq) {
+            alert("Chat Blocked: Missing Groq API Key. Please click the 'API Config' tab to securely configure your keys.");
+            return;
+        }
+        if (aiProvider === 'bedrock' && !hasBedrock) {
+            alert("Chat Blocked: Missing AWS Bedrock Credentials. Please click the 'API Config' tab to securely configure your keys.");
+            return;
+        }
 
         const userMsg = { id: Date.now(), role: 'user', text: query };
         updateChatMessages(activeChatId, prev => [...prev, userMsg]);
@@ -35,7 +48,7 @@ export default function Chat({ t, chats, activeChatId, updateChatMessages, aiPro
         let accumulatedText = '';
         const currentHistory = [...messages]; // capture before await
 
-        const metaData = await generateResponseStream(query, currentHistory, aiProvider, (chunk) => {
+        const metaData = await generateResponseStream(query, currentHistory, aiProvider, apiKeys, (chunk) => {
             setIsTyping(false);
             accumulatedText += chunk;
             updateChatMessages(activeChatId, prev => prev.map(m =>

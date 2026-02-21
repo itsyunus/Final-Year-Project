@@ -1,8 +1,18 @@
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 const MODEL = "llama-3.3-70b-versatile"; // Fast, conversational model
 
-export async function fetchGroqChatStream(messages, onChunk) {
+export async function fetchGroqChatStream(messages, apiKeys, onChunk) {
     try {
+        let GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+
+        if (apiKeys && apiKeys.groqKey) {
+            GROQ_API_KEY = apiKeys.groqKey;
+        }
+
+        if (!GROQ_API_KEY) {
+            onChunk("\n\n*Error: Missing Groq API Key. Please configure it in the Admin Settings panel.*");
+            return;
+        }
+
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {

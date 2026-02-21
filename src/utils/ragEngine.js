@@ -127,7 +127,7 @@ import { fetchGroqChatStream } from './groqService.js';
 import { fetchBedrockChatStream } from './bedrockService.js';
 
 // Generate response with streaming simulation
-export async function generateResponseStream(query, history, aiProvider, onChunk) {
+export async function generateResponseStream(query, history, aiProvider, apiKeys, onChunk) {
     const intent = classifyIntent(query);
     const retrievedDocs = hybridSearch(query);
     const pnrResult = extractPNR(query);
@@ -186,9 +186,9 @@ export async function generateResponseStream(query, history, aiProvider, onChunk
 
     try {
         if (aiProvider === 'bedrock') {
-            await fetchBedrockChatStream(messages, onChunk);
+            await fetchBedrockChatStream(messages, apiKeys, onChunk);
         } else {
-            await fetchGroqChatStream(messages, onChunk);
+            await fetchGroqChatStream(messages, apiKeys, onChunk);
         }
     } catch (e) {
         onChunk(`\n\n*Error: Failed to connect to AI service. Displaying standard fallback...*`);

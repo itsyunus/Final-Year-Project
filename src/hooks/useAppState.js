@@ -10,6 +10,25 @@ export function useAppState() {
     const [activeView, setActiveView] = useState('chat');
     const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
+    // API Keys State
+    const [apiKeys, setApiKeys] = useState(() => {
+        try {
+            const stored = localStorage.getItem('ab_api_keys');
+            return stored ? JSON.parse(stored) : { awsAccess: '', awsSecret: '', awsRegion: 'us-east-2', awsModelId: 'meta.llama3-3-70b-instruct-v1:0', groqKey: '' };
+        } catch (e) {
+            return { awsAccess: '', awsSecret: '', awsRegion: 'us-east-2', awsModelId: 'meta.llama3-3-70b-instruct-v1:0', groqKey: '' };
+        }
+    });
+
+    const saveApiKeys = useCallback((keys, persist = true) => {
+        setApiKeys(keys);
+        if (persist) {
+            localStorage.setItem('ab_api_keys', JSON.stringify(keys));
+        } else {
+            localStorage.removeItem('ab_api_keys');
+        }
+    }, []);
+
     // Chat History State
     const [chats, setChats] = useState([{ id: 'default', title: 'New Chat', messages: [], updatedAt: Date.now() }]);
     const [activeChatId, setActiveChatId] = useState('default');
@@ -70,6 +89,14 @@ export function useAppState() {
         setActiveView('chat');
         setChats([{ id: 'default', title: 'New Chat', messages: [], updatedAt: Date.now() }]);
         setActiveChatId('default');
+
+        // Reset in-memory keys to whatever is in storage, clearing session-only keys
+        try {
+            const stored = localStorage.getItem('ab_api_keys');
+            setApiKeys(stored ? JSON.parse(stored) : { awsAccess: '', awsSecret: '', awsRegion: 'us-east-2', awsModelId: 'meta.llama3-3-70b-instruct-v1:0', groqKey: '' });
+        } catch (e) {
+            setApiKeys({ awsAccess: '', awsSecret: '', awsRegion: 'us-east-2', awsModelId: 'meta.llama3-3-70b-instruct-v1:0', groqKey: '' });
+        }
     }, []);
 
     const createNewChat = useCallback(() => {
@@ -123,8 +150,8 @@ export function useAppState() {
 
     return {
         user, lang, t, theme, sidebarCollapsed, activeView, mobileSidebarOpen,
-        chats, activeChatId, aiProvider, // New states exported
+        chats, activeChatId, aiProvider, apiKeys, // New states exported
         login, logout, toggleLang, toggleTheme, toggleAiProvider, toggleSidebar, setActiveView, setMobileSidebarOpen,
-        createNewChat, updateChatMessages, switchChat // New methods exported
+        createNewChat, updateChatMessages, switchChat, saveApiKeys // New methods exported
     };
 }

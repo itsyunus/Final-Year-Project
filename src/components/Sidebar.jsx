@@ -1,10 +1,10 @@
-import { MessageSquare, Search, Plane, Home, FileText, BarChart2, Shield, Moon, Sun, Globe, LogOut, Plus, ChevronRight, Cpu, Zap } from 'lucide-react';
+import { MessageSquare, Search, Plane, Home, FileText, BarChart2, Shield, Moon, Sun, Globe, LogOut, Plus, ChevronRight, Cpu, Zap, Settings } from 'lucide-react';
 
 export default function Sidebar({
     user, activeView, setActiveView, collapsed, toggleSidebar,
     lang, toggleLang, theme, toggleTheme,
     chats, activeChatId, createNewChat, switchChat,
-    onLogout, t, mobileSidebarOpen, setMobileSidebarOpen, aiProvider, toggleAiProvider
+    onLogout, t, mobileSidebarOpen, setMobileSidebarOpen, aiProvider, toggleAiProvider, onOpenSettings
 }) {
     const isAdmin = user.role === 'ops_admin';
     const isCrew = user.role === 'cabin_crew' || user.role === 'ground_staff';
@@ -20,6 +20,7 @@ export default function Sidebar({
         { id: 'documents', icon: <FileText size={18} />, label: t.documents, badge: '10' },
         { id: 'analytics', icon: <BarChart2 size={18} />, label: t.analytics, badge: null },
         { id: 'audit', icon: <Shield size={18} />, label: t.auditLog, badge: '3' },
+        { id: 'settings', icon: <Settings size={18} />, label: 'API Config', badge: null },
     ];
 
     return (
@@ -58,7 +59,7 @@ export default function Sidebar({
                         {(isAdmin || isCrew) && (
                             <>
                                 <div className="nav-section-label">{isAdmin ? 'Administration' : 'Tools'}</div>
-                                {adminItems.filter(item => isAdmin || item.id === 'dashboard').map(item => (
+                                {adminItems.filter(item => isAdmin || item.id === 'dashboard' || item.id === 'settings').map(item => (
                                     <button
                                         key={item.id}
                                         className={`nav-item ${activeView === item.id ? 'active' : ''}`}
