@@ -1,48 +1,32 @@
-# Air Bharat Udaan Platform
+# Air Bharat Udaan - AI-Powered Flight Operations & Passenger Assistant
 
-A modern, "Liquid Glass" styled aviation dashboard and RAG-powered Chat Assistant for Air Bharat passengers, ground staff, cabin crew, and operations admins. 
+An enterprise airline customer intelligence and flight operations command portal integrating Retrieval-Augmented Generation (RAG) powered by AWS Bedrock Runtime and Groq LLM inference pipelines.
 
-## Features
-- **Role-Based Access Control**: Different experiences for Passengers vs. Staff/Admins.
-- **Dual AI Engine**: Seamlessly toggle between Groq (Llama 3 70B) and Amazon Bedrock models.
-- **RAG (Retrieval-Augmented Generation)**: Answers questions based on a simulated aviation knowledge base, including flight schedules, PNRs, baggage info, and DGCA policies.
-- **Flight Board & PNR Lookup**: Real-time mock data displays.
-- **Admin Dashboard**: Analytics and Document Management views.
+## System Capabilities
 
-## Running the Application Locally
+- Multi-Engine LLM Inference: Dynamic integration supporting AWS Bedrock (`@aws-sdk/client-bedrock-runtime`) and ultra-low-latency Groq Cloud API endpoints.
+- Retrieval-Augmented Generation: Vector lookup engine querying flight status policies, luggage guidelines, and regulatory documentation from a local structured knowledge base.
+- Operational Dashboards: Live flight board monitoring, PNR booking inquiry systems, and visual telemetry charts built with Recharts.
+- Responsive Interface: Single-page application built with React 18, Vite, Lucide icons, and modern design tokens.
 
-Follow these steps to set up and run the Air Bharat Udaan platform on a new computer:
+## Tech Stack
 
-### 1. Prerequisites
-Ensure you have [Node.js](https://nodejs.org/) installed on your computer.
+- Frontend: React 18, Vite 5, Tailwind CSS
+- Routing: React Router DOM 6
+- Data Visualization: Recharts
+- AI & LLM SDKs: AWS Bedrock Client SDK, Groq REST integration
+- Markdown Parser: React Markdown
 
-### 2. Download the Project
-Copy the `air-bharat-udaan` project folder to your new computer, or clone it if it is hosted on a Git repository.
+## Getting Started
 
-### 3. Install Dependencies
-Open a terminal in the root directory of the project (`air-bharat-udaan`) and run:
 ```bash
+# Clone the repository
+git clone https://github.com/itsyunus/Final-Year-Project.git
+cd Final-Year-Project
+
+# Install dependencies
 npm install
-```
 
-### 4. Configure Environment Variables
-Create a file named `.env.local` in the root directory of the project, and add your API keys.
-
-```env
-# Example .env.local
-VITE_AWS_ACCESS_KEY_ID=your_aws_access_key
-VITE_AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-VITE_BEDROCK_MODEL_ID=meta.llama3-3-70b-instruct-v1:0
-VITE_BEDROCK_EMBED_MODEL_ID=amazon.titan-embed-text-v2:0
-VITE_AWS_REGION=us-east-2
-VITE_GROQ_API_KEY=your_groq_api_key
-```
-
-### 5. Start the Development Server
-Once dependencies are installed and the environment variables are set up, start the app by running:
-```bash
+# Start development server
 npm run dev
 ```
-
-### 6. View the App
-Open your browser and navigate to the URL provided in the terminal (usually `http://localhost:5173/`).
