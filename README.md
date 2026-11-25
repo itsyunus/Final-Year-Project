@@ -30,3 +30,9 @@ npm install
 # Start development server
 npm run dev
 ```
+
+## Live Preview
+
+[Open the deployed Air Bharat project](https://final-year-project-azure-ten.vercel.app).
+
+![Air Bharat deployed entry screen](docs/screenshots/air-bharat-live.png)
